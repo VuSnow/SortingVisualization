@@ -24,6 +24,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
+import objects.CustomBarChart;
+import objects.Series;
 
 import java.net.URL;
 import java.util.Random;
@@ -77,18 +79,10 @@ public class MainScreenHandler implements Initializable {
     private int delayTime;
     private CategoryAxis xAxis;
     private NumberAxis yAxis;
-    private XYChart.Series series;
-    private BarChart barChart;
+    private Series series;
+    private CustomBarChart barChart;
     private String sortAlgorithm;
-    private final String backgroundTheme = "-fx-background-color: #0C2633;",
-            mainTheme = "-fx-background-color: #00D8FA;",
-            defaultTextColor = "-fx-text-fill: #00D8FA;",
-            textColorGreen = "-fx-text-fill: #39FF14;",
-            selectedBarsColor = "-fx-background-color: #FFAAAA;",
-            selectedBorderColor = "-fx-border-color: #FF7F7F;",
-            currentIndexColor = "-fx-background-color: #39FF14;",
-            disableColor = "-fx-background-color: #808080";
-
+    
 	public String getSortAlgorithm() {
 		return sortAlgorithm;
 	}
@@ -104,44 +98,12 @@ public class MainScreenHandler implements Initializable {
 	public int getDelayTime() {
 		return delayTime;
 	}
-
-	public String getBackgroundTheme() {
-		return backgroundTheme;
-	}
-
-	public String getMainTheme() {
-		return mainTheme;
-	}
-
-	public String getDefaultTextColor() {
-		return defaultTextColor;
-	}
-
-	public String getTextColorGreen() {
-		return textColorGreen;
-	}
-
-	public String getSelectedBarsColor() {
-		return selectedBarsColor;
-	}
-
-	public String getSelectedBorderColor() {
-		return selectedBorderColor;
-	}
-
-	public String getCurrentIndexColor() {
-		return currentIndexColor;
-	}
-
-	public String getDisableColor() {
-		return disableColor;
-	}
 	
-	public XYChart.Series getSeries() {
+	public Series getSeries() {
 		return series;
 	}
 
-	public void setSeries(XYChart.Series series) {
+	public void setSeries(Series series) {
 		this.series = series;
 	}
 
@@ -183,19 +145,25 @@ public class MainScreenHandler implements Initializable {
 	}
 	
 	private void randomize() {
-        series = new XYChart.Series();
-        barChart = new BarChart(xAxis, yAxis);
+		series = new Series();
+        barChart = new CustomBarChart(xAxis, yAxis);
         for (int i = 0; i < totalBars; i++) {
-            series.getData().add(new XYChart.Data(Integer.toString(i), new Random().nextInt(totalBars) + 1));
+            series.addData(new XYChart.Data<>(Integer.toString(i), new Random().nextInt(totalBars) + 1));
         }
-        barChart.getData().add(series);
+        barChart.addSeries(series);
         xAxis.setOpacity(1);
         yAxis.setOpacity(1);
 
-        displayBorderPane.setCenter(barChart);
+        displayBorderPane.setCenter(barChart.getBarChart());
 
-        for (int i = 0; i < totalBars; i++)
-            ((XYChart.Data<Object, Object>) series.getData().get(i)).getNode().setStyle(mainTheme);
+        for (int i = 0; i < totalBars; i++) {
+            XYChart.Data<String, Number> dataPoint = series.getDataPoint(i);
+            Platform.runLater(() -> {
+                if (dataPoint.getNode() != null) {
+                    dataPoint.getNode().setStyle(Utility.mainTheme);
+                }
+            });
+        }
 
         barChart.setBarGap(0);
         barChart.setCategoryGap(3);
@@ -212,9 +180,9 @@ public class MainScreenHandler implements Initializable {
         }else {
         	statusLabel.setText("SORTED");
         }
-        statusLabel.setStyle(defaultTextColor);
+        statusLabel.setStyle(Utility.defaultTextColor);
 
-        sortingAlgorithmLabel.setStyle(defaultTextColor);
+        sortingAlgorithmLabel.setStyle(Utility.defaultTextColor);
     }
 	
 	private void startSortingAlgorithm() {
@@ -259,14 +227,14 @@ public class MainScreenHandler implements Initializable {
 	
 	private void barsDisableEffect() {
         for (int i = 0; i < totalBars; i++) {
-            ((XYChart.Data) series.getData().get(i)).getNode().setStyle(disableColor);
+            ((XYChart.Data) series.getData().get(i)).getNode().setStyle(Utility.disableColor);
         }
     }
 	
 	public void barsDisableEffect(int i, int j) {
         Platform.runLater(() -> {
             for (int x = i; x < j; x++) {
-                ((XYChart.Data) series.getData().get(x)).getNode().setStyle(disableColor);
+                ((XYChart.Data) series.getData().get(x)).getNode().setStyle(Utility.disableColor);
             }
         });
     }
@@ -343,10 +311,10 @@ public class MainScreenHandler implements Initializable {
         Platform.runLater(() -> {
             if (Utility.checkSortedSeries(series)) {
                 statusLabel.setText("SORTED");
-                statusLabel.setStyle(textColorGreen);
+                statusLabel.setStyle(Utility.textColorGreen);
             } else {
                 statusLabel.setText("SORTING...");
-                statusLabel.setStyle(defaultTextColor);
+                statusLabel.setStyle(Utility.defaultTextColor);
             }
         });
     }

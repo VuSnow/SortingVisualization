@@ -6,13 +6,15 @@ import javafx.animation.ParallelTransition;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart;
+import objects.Series;
 import screenhandler.MainScreenHandler;
+import utils.Utility;
 
 public class QuickSort extends SortingAlgorithm{
 	
 	MainScreenHandler mainScreenHandler;
 
-	public QuickSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, XYChart.Series<Object, Object> series) {
+	public QuickSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
 		super(mainScreenHandler, arraySize, delayTime, series);
 		this.mainScreenHandler = mainScreenHandler;
 	}
@@ -40,22 +42,22 @@ public class QuickSort extends SortingAlgorithm{
 	        mainScreenHandler.barsDisableEffect(left, right);
 	        int pivot = (int) ((XYChart.Data) this.getSeries().getData().get(left)).getYValue();
 	        Node pivotNode = ((XYChart.Data) this.getSeries().getData().get(left)).getNode();
-	        Platform.runLater(() -> pivotNode.setStyle(mainScreenHandler.getCurrentIndexColor()));
+	        Platform.runLater(() -> pivotNode.setStyle(Utility.currentIndexColor));
 	        mainScreenHandler.delay();
 	        while (left <= right) {
 	            while ((int) ((XYChart.Data) (this.getSeries().getData().get(left))).getYValue() < pivot) {
 	                int finalLeft = left;
-	                mainScreenHandler.changeStyleEffect(finalLeft, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor());
+	                mainScreenHandler.changeStyleEffect(finalLeft, Utility.selectedBarsColor, Utility.selectedBorderColor);
 	                mainScreenHandler.delay();
 	                left++;
 	            }
 	            while ((int) ((XYChart.Data) (this.getSeries().getData().get(right))).getYValue() > pivot) {
 	                int finalRight = right;
-	                mainScreenHandler.changeStyleEffect(finalRight, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor());
+	                mainScreenHandler.changeStyleEffect(finalRight, Utility.selectedBarsColor, Utility.selectedBorderColor);
 	                mainScreenHandler.delay();
 	                right--;
 	            }
-	            mainScreenHandler.changeStyleEffect(left, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor(), right, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor());
+	            mainScreenHandler.changeStyleEffect(left, Utility.selectedBarsColor, Utility.selectedBorderColor, right, Utility.selectedBarsColor, Utility.selectedBorderColor);
 	            mainScreenHandler.delay();
 	            if (left <= right) {
 	                int finalLeft = left, finalRight = right;
@@ -70,11 +72,11 @@ public class QuickSort extends SortingAlgorithm{
 	                } catch (Exception e) {
 	                }
 
-	                mainScreenHandler.changeStyleEffect(left, mainScreenHandler.getMainTheme(), right, mainScreenHandler.getMainTheme());
+	                mainScreenHandler.changeStyleEffect(left, Utility.mainTheme, right, Utility.mainTheme);
 	                left++;
 	                right--;
 	            }
-	            mainScreenHandler.changeStyleEffect(left, mainScreenHandler.getMainTheme(), right, mainScreenHandler.getMainTheme());
+	            mainScreenHandler.changeStyleEffect(left, Utility.mainTheme, right, Utility.mainTheme);
 	        }
 	        return left;
 	    }

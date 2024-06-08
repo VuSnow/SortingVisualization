@@ -1,13 +1,15 @@
 package sortingalgorithms;
 
 import javafx.scene.chart.XYChart;
+import objects.Series;
 import screenhandler.MainScreenHandler;
+import utils.Utility;
 
 public class MergeSort extends SortingAlgorithm{
 	
 	MainScreenHandler mainScreenHandler;
 	
-	public MergeSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, XYChart.Series<Object, Object> series) {
+	public MergeSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
 		super(mainScreenHandler, arraySize, delayTime, series);
 		this.mainScreenHandler = mainScreenHandler;
 	}
@@ -42,7 +44,7 @@ public class MergeSort extends SortingAlgorithm{
 
         mainScreenHandler.barsDisableEffect(i, j);
         while (i <= mid && j <= high) {
-            mainScreenHandler.changeStyleEffect(i, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor(), j, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor());
+            mainScreenHandler.changeStyleEffect(i, Utility.selectedBarsColor, Utility.selectedBorderColor, j, Utility.selectedBarsColor, Utility.selectedBorderColor);
             mainScreenHandler.delay();
             if ((int) ((XYChart.Data) this.getSeries().getData().get(i)).getYValue() < (int) ((XYChart.Data) this.getSeries().getData().get(j)).getYValue()) {
                 ((XYChart.Data) copySeries.getData().get(k)).setYValue(((XYChart.Data) this.getSeries().getData().get(i)).getYValue());
@@ -53,7 +55,7 @@ public class MergeSort extends SortingAlgorithm{
                 j++;
                 k++;
             }
-            mainScreenHandler.changeStyleEffect(i, mainScreenHandler.getMainTheme(), j, mainScreenHandler.getMainTheme());
+            mainScreenHandler.changeStyleEffect(i, Utility.mainTheme, j, Utility.mainTheme);
         }
         for (; i <= mid; i++) {
             ((XYChart.Data) copySeries.getData().get(k)).setYValue(((XYChart.Data) this.getSeries().getData().get(i)).getYValue());
@@ -66,7 +68,7 @@ public class MergeSort extends SortingAlgorithm{
 
         for (int x = low; x <= high; x++) {
             int finalX = x;
-            mainScreenHandler.changeStyleEffect(finalX,mainScreenHandler.getMainTheme());
+            mainScreenHandler.changeStyleEffect(finalX,Utility.mainTheme);
             ((XYChart.Data) this.getSeries().getData().get(x)).setYValue(((XYChart.Data) copySeries.getData().get(x)).getYValue());
             mainScreenHandler.delay();
         }

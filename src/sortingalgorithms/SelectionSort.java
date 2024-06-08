@@ -5,6 +5,7 @@ import java.util.concurrent.CountDownLatch;
 import javafx.animation.ParallelTransition;
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
+import objects.Series;
 import screenhandler.MainScreenHandler;
 import utils.Utility;
 
@@ -12,7 +13,7 @@ public class SelectionSort extends SortingAlgorithm {
 	
 	MainScreenHandler mainScreenHandler;
 	
-    public SelectionSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, XYChart.Series<Object, Object> series) {
+    public SelectionSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
 		super(mainScreenHandler, arraySize, delayTime, series);
 		this.mainScreenHandler = mainScreenHandler;
 	}
@@ -27,13 +28,13 @@ public class SelectionSort extends SortingAlgorithm {
             int finalI = i;
             while (j < this.getArraySize()) {
                 int finalJ = j, finalK = k;
-                mainScreenHandler.changeStyleEffect(finalI, mainScreenHandler.getCurrentIndexColor());
-                mainScreenHandler.changeStyleEffect(finalJ, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor(), finalK, mainScreenHandler.getSelectedBarsColor(), mainScreenHandler.getSelectedBorderColor());
+                mainScreenHandler.changeStyleEffect(finalI, Utility.currentIndexColor);
+                mainScreenHandler.changeStyleEffect(finalJ, Utility.selectedBarsColor, Utility.selectedBorderColor, finalK, Utility.selectedBarsColor, Utility.selectedBorderColor);
                 mainScreenHandler.delay();
                 if ((int) ((XYChart.Data) this.getSeries().getData().get(j)).getYValue() < (int) ((XYChart.Data) this.getSeries().getData().get(k)).getYValue()) {
                     k = j;
                 }
-                mainScreenHandler.changeStyleEffect(finalJ, mainScreenHandler.getMainTheme(), finalK, mainScreenHandler.getMainTheme());
+                mainScreenHandler.changeStyleEffect(finalJ, Utility.mainTheme, finalK, Utility.mainTheme);
                 j++;
             }
             int finalK = k;
@@ -47,7 +48,7 @@ public class SelectionSort extends SortingAlgorithm {
                 latch.await();
             } catch (Exception e) {
             }
-            mainScreenHandler.changeStyleEffect(finalI, mainScreenHandler.getMainTheme());
+            mainScreenHandler.changeStyleEffect(finalI, Utility.mainTheme);
             i++;
         }
         mainScreenHandler.setAllDisable(false);

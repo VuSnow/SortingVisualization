@@ -1,6 +1,7 @@
 package sortingalgorithms;
 
 import javafx.scene.chart.XYChart;
+import objects.Series;
 import screenhandler.MainScreenHandler;
 
 public abstract class SortingAlgorithm {
@@ -8,9 +9,9 @@ public abstract class SortingAlgorithm {
 	private MainScreenHandler mainScreenHandler;
 	private int arraySize;
 	private int delayTime;
-	private XYChart.Series<Object, Object> series;
+	private Series series;
 	
-	public SortingAlgorithm(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, XYChart.Series<Object, Object> series) {
+	public SortingAlgorithm(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
 		this.mainScreenHandler = mainScreenHandler;
 		this.arraySize = arraySize;
 		this.delayTime = delayTime;
@@ -41,11 +42,11 @@ public abstract class SortingAlgorithm {
 		this.delayTime = delayTime;
 	}
 
-	public XYChart.Series<Object, Object> getSeries() {
+	public Series getSeries() {
 		return series;
 	}
 
-	public void setSeries(XYChart.Series<Object, Object> series) {
+	public void setSeries(Series series) {
 		this.series = series;
 	}
 

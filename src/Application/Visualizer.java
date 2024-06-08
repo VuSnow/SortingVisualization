@@ -16,11 +16,6 @@ import javafx.stage.Stage;
 import utils.Utility;
 
 public class Visualizer extends Application{
-	
-	private static final int ARRAY_SIZE = 20;
-    private static final int MAX_VALUE = 100;
-    private static final int RECT_WIDTH = 30;
-	
     public static void main(String[] args) {
         launch(args);
     }

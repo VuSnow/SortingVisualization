@@ -27,6 +27,7 @@ public class SelectionSort extends SortingAlgorithm {
             j = i + 1;
             int finalI = i;
             while (j < this.getArraySize()) {
+            	checkPause();
                 int finalJ = j, finalK = k;
                 mainScreenHandler.changeStyleEffect(finalI, Utility.currentIndexColor);
                 mainScreenHandler.changeStyleEffect(finalJ, Utility.selectedBarsColor, Utility.selectedBorderColor, finalK, Utility.selectedBarsColor, Utility.selectedBorderColor);

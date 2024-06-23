@@ -28,6 +28,7 @@ public class ShellSort extends SortingAlgorithm{
             i = gap;
             // insertion sort procedure
             while (i < this.getArraySize()) {
+            	checkPause();
                 j = i - gap;
                 x = (int) ((XYChart.Data) this.getSeries().getData().get(i)).getYValue();
                 mainScreenHandler.changeStyleEffect(i, Utility.selectedBarsColor, Utility.selectedBorderColor, j, Utility.selectedBarsColor, Utility.selectedBorderColor);

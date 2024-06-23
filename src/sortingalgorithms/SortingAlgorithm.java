@@ -1,6 +1,5 @@
 package sortingalgorithms;
 
-import javafx.scene.chart.XYChart;
 import objects.Series;
 import screenhandler.MainScreenHandler;
 
@@ -51,4 +50,16 @@ public abstract class SortingAlgorithm {
 	}
 
 	public abstract void sort();
+	
+	protected void checkPause() {
+        synchronized (mainScreenHandler.getPauseLock()) {
+            while (mainScreenHandler.getIsPaused()) {
+                try {
+                    mainScreenHandler.getPauseLock().wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

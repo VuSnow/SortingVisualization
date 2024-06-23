@@ -9,24 +9,26 @@ import objects.Series;
 import screenhandler.MainScreenHandler;
 import utils.Utility;
 
-public class InsertionSort extends SortingAlgorithm{
-	
-	MainScreenHandler mainScreenHandler;
-	
-	public InsertionSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
-		super(mainScreenHandler, arraySize, delayTime, series);
-		this.mainScreenHandler = mainScreenHandler;
-	}
+public class InsertionSort extends SortingAlgorithm {
 
-	@Override
+    private MainScreenHandler mainScreenHandler;
+
+    public InsertionSort(MainScreenHandler mainScreenHandler, int arraySize, int delayTime, Series series) {
+        super(mainScreenHandler, arraySize, delayTime, series);
+        this.mainScreenHandler = mainScreenHandler;
+    }
+
+    @Override
     public void sort() {
-		int i = 1, j;
+        int i = 1, j;
         while (i < this.getArraySize()) {
-            int x = (int) ((XYChart.Data) this.getSeries().getData().get(i)).getYValue();
+            checkPause(); // Check for pause at the beginning of each outer loop iteration
+            int x = (int) ((XYChart.Data<String, Number>) this.getSeries().getData().get(i)).getYValue();
             j = i - 1;
             mainScreenHandler.changeStyleEffect(i, Utility.selectedBarsColor, Utility.selectedBorderColor, j, Utility.selectedBarsColor, Utility.selectedBorderColor);
             mainScreenHandler.delay();
-            while (j >= 0 && (int) ((XYChart.Data) this.getSeries().getData().get(j)).getYValue() > x) {
+            while (j >= 0 && (int) ((XYChart.Data<String, Number>) this.getSeries().getData().get(j)).getYValue() > x) {
+                checkPause(); // Check for pause within the inner loop
                 CountDownLatch latch = new CountDownLatch(1);
                 int finalJ = j;
                 mainScreenHandler.changeStyleEffect(finalJ, Utility.selectedBarsColor, Utility.selectedBorderColor, finalJ + 1, Utility.selectedBarsColor, Utility.selectedBorderColor);
@@ -38,12 +40,14 @@ public class InsertionSort extends SortingAlgorithm{
                 try {
                     latch.await();
                 } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                    return;
                 }
                 mainScreenHandler.changeStyleEffect(finalJ, Utility.mainTheme, finalJ + 1, Utility.mainTheme);
                 j--;
             }
             mainScreenHandler.changeStyleEffect(i, Utility.mainTheme, j, Utility.mainTheme);
-            ((XYChart.Data) this.getSeries().getData().get(j + 1)).setYValue(x);
+            ((XYChart.Data<String, Number>) this.getSeries().getData().get(j + 1)).setYValue(x);
             i++;
         }
         mainScreenHandler.setAllDisable(false);

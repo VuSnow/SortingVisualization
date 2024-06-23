@@ -27,6 +27,7 @@ public class QuickSort extends SortingAlgorithm{
 	}
 	
 	private void quickSortRec(int startIndex, int endIndex) {
+		checkPause();
 		int idx = partition(startIndex, endIndex);
 
         if (startIndex < idx - 1) {

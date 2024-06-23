@@ -26,6 +26,7 @@ public class BubbleSort extends SortingAlgorithm{
         for (int i = 0; i < this.getArraySize() - 1; i++) {
             flag = false;
             for (int j = 0; j < this.getArraySize() - i - 1; j++) {
+            	checkPause();
                 mainScreenHandler.changeStyleEffect(j, Utility.selectedBarsColor, Utility.selectedBorderColor, j + 1, Utility.selectedBarsColor, Utility.selectedBorderColor);
                 mainScreenHandler.delay();
                 if ((int) ((XYChart.Data) this.getSeries().getData().get(j)).getYValue() > (int) ((XYChart.Data) this.getSeries().getData().get(j + 1)).getYValue()) {

@@ -14,25 +14,20 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import objects.CustomBarChart;
 import objects.Series;
 
+import java.lang.classfile.instruction.NewMultiArrayInstruction;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.CountDownLatch;
-
-import javax.swing.text.Utilities;
 
 public class MainScreenHandler implements Initializable {
 
@@ -48,6 +43,12 @@ public class MainScreenHandler implements Initializable {
     			mergeSortBtn, aboutBtn, sortingAlgorithmLabel, HeaderText, randomizeBtn, startBtn;
 	
 	private Label currentlySelectedSortBtn;
+	
+	@FXML
+	private Label pauseBtn;
+	
+	private boolean isPaused = false;
+	private final Object pauseLock = new Object();
 	
 	@FXML
 	private void handleSortingAlgorithmClick(MouseEvent event) {
@@ -70,9 +71,32 @@ public class MainScreenHandler implements Initializable {
 		setAllDisable(true);
 		barsDisableEffect();
 		isArraySorted();
+		pauseBtn.setDisable(false);
 		new Thread(() -> {
 			startSortingAlgorithm();
 		}).start();
+	}
+	
+	@FXML
+	private void pauseBtnClicked(MouseEvent event) {
+		if (isPaused) {
+            resumeSorting();
+            pauseBtn.setText("Pause");
+        } else {
+            pauseSorting();
+            pauseBtn.setText("Resume");
+        }
+	}
+	
+	private void pauseSorting() {
+	    isPaused = true;
+	}
+
+	private void resumeSorting() {
+	    synchronized (pauseLock) {
+	        isPaused = false;
+	        pauseLock.notifyAll();
+	    }
 	}
 	
 	private int totalBars;
@@ -105,6 +129,18 @@ public class MainScreenHandler implements Initializable {
 
 	public void setSeries(Series series) {
 		this.series = series;
+	}
+
+	public boolean getIsPaused() {
+		return isPaused;
+	}
+
+	public void setIsPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
+
+	public Object getPauseLock() {
+		return pauseLock;
 	}
 
 	@Override
@@ -140,6 +176,7 @@ public class MainScreenHandler implements Initializable {
         mergeSortBtn.setTooltip(new Tooltip("\tWorst case\t\t\t\tBest Case\nTime Complexity: O(n log n)\tTime Complexity: O(n log n)"));
         
         startBtn.setDisable(true);
+        pauseBtn.setDisable(true);
         
 //        selectionSortBtn.setOnMouseClicked(e -> {});
 	}
